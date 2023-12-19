@@ -4,7 +4,8 @@ import {
 	Button,
 	useDisclosure,
 	Box,
-	Flex
+	Flex,
+	Spacer
 } from "@chakra-ui/react";
 import { 
 	SortableContext,
@@ -67,11 +68,21 @@ export default function Welcome() {
 		})
 	}
 
+	const toggleDiceModal = () => {
+		dispatch({
+			type: "setDiceModalIsOpen",
+			data: !state.diceModalIsOpen
+		})
+	}
+
 	return (
 		<Flex direction="column" h="full">
 			<AddPlayerModal isOpen={isOpen} onClose={onClose} />
-
-			<Heading as="h1" size="4xl" mb={4}>Turn taker</Heading>
+			<Flex direction="row">
+				<Heading as="h1" size="4xl" mb={4}>Turn taker</Heading>
+				<Spacer />
+				<Button colorScheme="purple" onClick={toggleDiceModal}>Dice</Button>
+			</Flex>
 			<Text mb={4}>This simple application helps you remember who takes turn in a game.</Text>
 			{state.players.length === 0 ? <Text>Click "Add players" to get started.</Text> : null}
 			{state.players.length > 0 ? <Heading as="h2" size="lg" mb={4}>Players:</Heading> : null}

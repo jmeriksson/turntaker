@@ -8,11 +8,13 @@ export type TPlayer = {
 export type TGameState = {
 	isPlaying: boolean
 	players: TPlayer[]
+	diceModalIsOpen: boolean
 }
 
 export type TGameAction =
   | { type: "setIsPlaying"; data: boolean }
   | { type: "setPlayers"; data: TPlayer[] }
+  | { type: "setDiceModalIsOpen"; data: boolean }
 
 export type TSearchResultsDispatch = (action: TGameAction) => void
 
@@ -40,6 +42,12 @@ function gameReducer(
 				players: action.data
 			}
 		}
+		case "setDiceModalIsOpen": {
+			return {
+				...state,
+				diceModalIsOpen: action.data
+			}
+		}
 	}
 }
 
@@ -54,7 +62,8 @@ export type TGameProviderProps = {
 function GameProvider({ children } : TGameProviderProps) {
 	const [state, dispatch] = useReducer(gameReducer, {
 		isPlaying: false,
-		players: []
+		players: [],
+		diceModalIsOpen: false
 	})
 
 	// Get players from local storage on page load.

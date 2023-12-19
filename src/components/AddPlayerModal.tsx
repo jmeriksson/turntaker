@@ -52,49 +52,49 @@ export default function AddPlayerModal({isOpen, onClose}: Props) {
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
-				<ModalOverlay />
-				<ModalContent pb={4}>
-					<ModalHeader>Add players</ModalHeader>
-					<ModalCloseButton />
-					<form onSubmit={validateAndAddPlayer}>
-						<ModalBody>
-						{state.players.length > 0 ? (
-							<>
-								<Text>Players:</Text>
-								<UnorderedList mb="4">
-									{state.players.map(player => {
-										return (
-											<ListItem key={player.id}>
-												{player.name}
-											</ListItem>
-										)
-									})}
-								</UnorderedList>
-							</>
+			<ModalOverlay />
+			<ModalContent pb={4}>
+				<ModalHeader>Add players</ModalHeader>
+				<ModalCloseButton />
+				<form onSubmit={validateAndAddPlayer}>
+					<ModalBody>
+					{state.players.length > 0 ? (
+						<>
+							<Text>Players:</Text>
+							<UnorderedList mb="4">
+								{state.players.map(player => {
+									return (
+										<ListItem key={player.id}>
+											{player.name}
+										</ListItem>
+									)
+								})}
+							</UnorderedList>
+						</>
+					): null}
+					<FormControl isRequired>
+						<Input
+							type="text"
+							size="lg"
+							value={inputValue}
+							onChange={handleInputChange}
+						/>
+						{errorMessage ? (
+							<p>Error: {errorMessage}</p>
 						): null}
-						<FormControl isRequired>
-							<Input
-								type="text"
-								size="lg"
-								value={inputValue}
-								onChange={handleInputChange}
-							/>
-							{errorMessage ? (
-								<p>Error: {errorMessage}</p>
-							): null}
-						</FormControl>
-						</ModalBody>
-						<ModalFooter>
-							<Button
-								type="submit"
-								colorScheme="teal"
-								size="lg"
-								width="full">
-									Add
-							</Button>
-						</ModalFooter>
-					</form>
-				</ModalContent>
-			</Modal>
+					</FormControl>
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							type="submit"
+							colorScheme="teal"
+							size="lg"
+							width="full">
+								Add
+						</Button>
+					</ModalFooter>
+				</form>
+			</ModalContent>
+		</Modal>
 	)
 }

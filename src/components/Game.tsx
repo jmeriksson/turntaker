@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { Button, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
 import { TPlayer } from "../context";
 import useGame from "../hooks/useGame";
 
@@ -46,12 +46,21 @@ export default function Game() {
 		})
 	}
 
+	const toggleDiceModal = () => {
+		dispatch({
+			type: "setDiceModalIsOpen",
+			data: !state.diceModalIsOpen
+		})
+	}
+
 	return (
 			<Flex direction="column" minH="full">
 				{currentPlayer && playersInGame.length === 1 ? (
 					<>
-						<Flex justify="flex-end">
+						<Flex direction="row">
 							<Button colorScheme="red" onClick={handleEndGame}>End game</Button>
+							<Spacer />
+							<Button colorScheme="purple" onClick={toggleDiceModal}>Dice</Button>
 						</Flex>
 						<Flex flex="1" direction="column" align="center" justify="center">
 							<Text>You're the only player left,</Text>
@@ -61,8 +70,10 @@ export default function Game() {
 				): null}
 				{ currentPlayer && playersInGame.length > 1 ? (
 					<>
-						<Flex>
+						<Flex direction="row">
 							<Button colorScheme="red" onClick={handleEndGame}>End game</Button>
+							<Spacer />
+							<Button colorScheme="purple" onClick={toggleDiceModal}>Dice</Button>
 						</Flex>
 						<Flex flex="1" direction="column" align="center" justify="center">
 							<Text>It's your turn,</Text>
