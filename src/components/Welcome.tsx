@@ -4,7 +4,8 @@ import {
 	Button,
 	useDisclosure,
 	Box,
-	Flex
+	Flex,
+	Spacer
 } from "@chakra-ui/react";
 import { 
 	SortableContext,
@@ -12,7 +13,6 @@ import {
 	sortableKeyboardCoordinates,
 	arrayMove
 } from "@dnd-kit/sortable";
-import { useContext } from "react";
 import {
 	DndContext,
 	DragEndEvent,
@@ -22,17 +22,14 @@ import {
 	PointerSensor,
 	KeyboardSensor
 } from "@dnd-kit/core";
-import { AppContext, TAppContext, TPlayer } from "../App";
 import SortablePlayer from "./SortablePlayer";
 import AddPlayerModal from "./AddPlayerModal";
+import { TPlayer } from "../context";
+import useGame from "../hooks/useGame";
 
-type Props = {
-	togglePlaying: () => void
-}
-
-export default function Welcome({ togglePlaying }: Props) {
+export default function Welcome() {
 	const {isOpen, onOpen, onClose} = useDisclosure()
-	const { players, setPlayers } = useContext(AppContext) as TAppContext
+	const { state, dispatch } = useGame()
 	const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -45,31 +42,56 @@ export default function Welcome({ togglePlaying }: Props) {
     if (over === null || active.id === over.id) {
       return;
     }
-    setPlayers((players) => {
-      const oldIndex = players.findIndex((player) => player.id === active.id);
-      const newIndex = players.findIndex((player) => player.id === over.id);
-      return arrayMove(players, oldIndex, newIndex);
-    });
+
+		const oldIndex = state.players.findIndex((player) => player.id === active.id);
+      const newIndex = state.players.findIndex((player) => player.id === over.id);
+
+		dispatch({
+			type: "setPlayers",
+			data: arrayMove(state.players, oldIndex, newIndex)
+		})
 	}
 
 	const removePlayer = (playerId: string) => {
-		setPlayers(players.filter((player: TPlayer) => player.id != playerId))
+		const remainingPlayers = state.players.filter((player: TPlayer) => player.id != playerId)
+		
+		dispatch({
+			type: "setPlayers",
+			data: remainingPlayers
+		})
+	}
+
+	const handleStartGame = () => {
+		dispatch({
+			type: "setIsPlaying",
+			data: true
+		})
+	}
+
+	const toggleDiceModal = () => {
+		dispatch({
+			type: "setDiceModalIsOpen",
+			data: !state.diceModalIsOpen
+		})
 	}
 
 	return (
 		<Flex direction="column" h="full">
 			<AddPlayerModal isOpen={isOpen} onClose={onClose} />
-
-			<Heading as="h1" size="4xl" mb={4}>Turn taker</Heading>
+			<Flex direction="row">
+				<Heading as="h1" size="4xl" mb={4}>Turn taker</Heading>
+				<Spacer />
+				<Button colorScheme="purple" onClick={toggleDiceModal}>Dice</Button>
+			</Flex>
 			<Text mb={4}>This simple application helps you remember who takes turn in a game.</Text>
-			{players.length === 0 ? <Text>Click "Add players" to get started.</Text> : null}
-			{players.length > 0 ? <Heading as="h2" size="lg" mb={4}>Players:</Heading> : null}
+			{state.players.length === 0 ? <Text>Click "Add players" to get started.</Text> : null}
+			{state.players.length > 0 ? <Heading as="h2" size="lg" mb={4}>Players:</Heading> : null}
 			<Box flex={1} overflow="auto">
-			{players.length > 0 ? (
+			{state.players.length > 0 ? (
 				<DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd} sensors={sensors}>
 					<Box mb={4}>
-						<SortableContext items={players} strategy={verticalListSortingStrategy}>
-							{players.map(player => {
+						<SortableContext items={state.players} strategy={verticalListSortingStrategy}>
+							{state.players.map(player => {
 								return (
 									<SortablePlayer key={player.id} removePlayer={removePlayer} {...player} />
 								)
@@ -81,7 +103,7 @@ export default function Welcome({ togglePlaying }: Props) {
 			</Box>
 			<Flex gap="2">
 				<Button flex={1} colorScheme="teal" size="lg" onClick={onOpen}>Add players</Button>
-				{players.length > 0 ? (<Button flex={1} colorScheme="green" size="lg" onClick={togglePlaying}>Start playing</Button>): null}
+				{state.players.length > 0 ? (<Button flex={1} colorScheme="green" size="lg" onClick={handleStartGame}>Start playing</Button>): null}
 			</Flex>
 		</Flex>
 	)
