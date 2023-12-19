@@ -13,8 +13,8 @@ import {
 	ModalFooter,
 	FormControl,
 } from "@chakra-ui/react"
-import { AppContext, TAppContext } from "../App"
-import { useContext, useState } from "react"
+import { useState } from "react"
+import useGame from "../hooks/useGame"
 
 type Props = {
 	isOpen: boolean
@@ -22,13 +22,16 @@ type Props = {
 }
 
 export default function AddPlayerModal({isOpen, onClose}: Props) {
-	const { players, setPlayers } = useContext(AppContext) as TAppContext
+	const { state, dispatch } = useGame()
 	const [inputValue, setInputValue] = useState('')
 	const [errorMessage, setErrorMessage] = useState('')
 
 	const addPlayer = (playerName: string) => {
 		const id = Date.now().toString()
-		setPlayers([...players, {id: id, name: playerName}])
+		dispatch({
+			type: "setPlayers",
+			data: [...state.players, {id: id, name: playerName}]
+		})
 	}
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,11 +58,11 @@ export default function AddPlayerModal({isOpen, onClose}: Props) {
 					<ModalCloseButton />
 					<form onSubmit={validateAndAddPlayer}>
 						<ModalBody>
-						{players.length > 0 ? (
+						{state.players.length > 0 ? (
 							<>
 								<Text>Players:</Text>
 								<UnorderedList mb="4">
-									{players.map(player => {
+									{state.players.map(player => {
 										return (
 											<ListItem key={player.id}>
 												{player.name}

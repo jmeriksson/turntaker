@@ -1,20 +1,20 @@
-import { useContext, useEffect, useState } from "react";
-import { AppContext, TAppContext, TPlayer } from "../App";
-import { Button, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { TPlayer } from "../context";
+import useGame from "../hooks/useGame";
 
-type Props = {
-	togglePlaying: () => void
-}
-
-export default function Game({togglePlaying}: Props) {
-	const { players } = useContext(AppContext) as TAppContext
-	const [ currentPlayer, setCurrentPlayer ] = useState<TPlayer>(players[0])
-	const [ playersInGame, setPlayersInGame ] = useState<TPlayer[]>(players)
+export default function Game() {
+	const { state, dispatch } = useGame()
+	const [ currentPlayer, setCurrentPlayer ] = useState<TPlayer>(state.players[0])
+	const [ playersInGame, setPlayersInGame ] = useState<TPlayer[]>(state.players)
 	useEffect(() => {
 		if (playersInGame.length === 0) {
-			togglePlaying()
+			dispatch({
+				type: "setIsPlaying",
+				data: false
+			})
 		}
-	}, [playersInGame])
+	}, [dispatch, playersInGame.length])
 
 	const eliminateCurrentPlayer = () => {
 		setPlayersInGame(playersInGame.filter((player: TPlayer, index: number) => {
@@ -39,16 +39,19 @@ export default function Game({togglePlaying}: Props) {
 		}
 	}
 
-	// const toggleDice = () => {
-
-	// }
+	const handleEndGame = () => {
+		dispatch({
+			type: "setIsPlaying",
+			data: false
+		})
+	}
 
 	return (
 			<Flex direction="column" minH="full">
 				{currentPlayer && playersInGame.length === 1 ? (
 					<>
 						<Flex justify="flex-end">
-							<Button colorScheme="red" onClick={togglePlaying}>End game</Button>
+							<Button colorScheme="red" onClick={handleEndGame}>End game</Button>
 						</Flex>
 						<Flex flex="1" direction="column" align="center" justify="center">
 							<Text>You're the only player left,</Text>
@@ -59,9 +62,7 @@ export default function Game({togglePlaying}: Props) {
 				{ currentPlayer && playersInGame.length > 1 ? (
 					<>
 						<Flex>
-							<Button colorScheme="purple">Dice</Button>
-							<Spacer />
-							<Button colorScheme="red" onClick={togglePlaying}>End game</Button>
+							<Button colorScheme="red" onClick={handleEndGame}>End game</Button>
 						</Flex>
 						<Flex flex="1" direction="column" align="center" justify="center">
 							<Text>It's your turn,</Text>

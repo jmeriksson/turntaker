@@ -1,8 +1,8 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { TPlayer } from "../App";
 import { CSS } from "@dnd-kit/utilities";
 import { Card, CardBody, IconButton, Text, Flex, ButtonGroup } from "@chakra-ui/react";
 import { DeleteIcon, UpDownIcon } from "@chakra-ui/icons";
+import { TPlayer } from "../context";
 
 type Props = TPlayer & {
 	removePlayer: (id: string) => void
