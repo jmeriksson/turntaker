@@ -7,7 +7,9 @@ export default function useGame(): TGameContext {
 		return {
 			state: {
 				isPlaying: false,
-				players: []
+				players: [],
+				diceModalIsOpen: false,
+				diceIsRolling: false
 			},
 			dispatch: () => {}
 		}

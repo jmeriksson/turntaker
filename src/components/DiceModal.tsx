@@ -23,11 +23,37 @@ export default function DiceModal() {
 	}
 
 	const handleRoll = () => {
+		dispatch({ type: "setDiceIsRolling", data: true })
+		// Roll dice every 100ms, seven times
+    for (let i = 1; i <= 7; i++) {
+			setTimeout(rollDice, 100 * i)
+		}
+
+		// Roll dice every 200ms, five times, after the previous rolls
+		for (let i = 1; i <= 5; i++) {
+			setTimeout(rollDice, 700 + 200 * i)
+		}
+
+		// Roll dice every 400ms, twice, after the previous rolls
+		for (let i = 1; i <= 2; i++) {
+			setTimeout(rollDice, 1700 + 400 * i)
+		}
+
+		setTimeout(() => {
+			dispatch({ type: "setDiceIsRolling", data: false })
+		}, 2500)
+	}
+
+	const rollDice = () => {
 		const rolledDice: number[] = []
 		for (let i = 0; i < numberOfDice; i++) {
-			rolledDice.push(Math.floor(Math.random() * (parseInt(dieType.substring(1)))) + 1)
+			rolledDice.push(rollDie(dieType))
 		}
 		setRolledDice(rolledDice)
+	}
+
+	const rollDie = (die: TDie) => {
+		return Math.floor(Math.random() * (parseInt(die.substring(1)))) + 1
 	}
 
 	const sumRolledDice = () => {
@@ -45,13 +71,16 @@ export default function DiceModal() {
 				<ModalBody>
 					<Flex direction="column" align="center" justify="center" w="full" h="full">
 						<Text fontSize="6xl">{sumRolledDice()}</Text>
-						<Text>({rolledDice.map((rolledDie: number, index) => {
-							let value = rolledDie.toString()
-							if (index !== rolledDice.length - 1) {
-								value += ', '
-							}
-							return value
-						})})</Text>
+						{state.diceIsRolling
+							? <Text>Rolling...</Text>
+							: (<Text>({rolledDice.map((rolledDie: number, index) => {
+								let value = rolledDie.toString()
+								if (index !== rolledDice.length - 1) {
+									value += ', '
+								}
+								return value
+							})})</Text>)
+						}
 					</Flex>
 				</ModalBody>
 				<ModalFooter>
