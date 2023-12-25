@@ -9,6 +9,7 @@ export default function useGame(): TGameContext {
 				isPlaying: false,
 				players: [],
 				diceModalIsOpen: false,
+				diceIsRolling: false
 			},
 			dispatch: () => {}
 		}
