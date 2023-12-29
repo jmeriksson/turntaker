@@ -6,8 +6,8 @@ This React application is built to help keep track of which player takes turn in
 
 ### Adding a player and starting game
 
-![Adding a player and starting](/public/turntaker.gif "Screen Recording")
+<img src="./public/turntaker.gif" alt="Adding a player and starting" width="380" />
 
 ### Using the built-in dice simulator
 
-![Using the dice simulator](/public/turntaker_diceroll.gif "Dice roll")
+<img src="./public/turntaker_diceroll.gif" alt="Dice roll" width="380" />
