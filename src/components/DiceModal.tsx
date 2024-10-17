@@ -25,7 +25,7 @@ export default function DiceModal() {
 	const handleRoll = () => {
 		dispatch({ type: "setDiceIsRolling", data: true })
 		// Roll dice every 100ms, seven times
-    for (let i = 1; i <= 7; i++) {
+    	for (let i = 1; i <= 7; i++) {
 			setTimeout(rollDice, 100 * i)
 		}
 

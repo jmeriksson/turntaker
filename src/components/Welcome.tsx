@@ -39,12 +39,12 @@ export default function Welcome() {
 
 	const onDragEnd = (event: DragEndEvent) => {
 		const { active, over } = event;
-    if (over === null || active.id === over.id) {
-      return;
-    }
+		if (over === null || active.id === over.id) {
+			return;
+		}
 
 		const oldIndex = state.players.findIndex((player) => player.id === active.id);
-      const newIndex = state.players.findIndex((player) => player.id === over.id);
+    	const newIndex = state.players.findIndex((player) => player.id === over.id);
 
 		dispatch({
 			type: "setPlayers",

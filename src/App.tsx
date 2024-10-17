@@ -4,7 +4,7 @@ import Wrapper from './components/Wrapper'
 import DiceModal from './components/DiceModal'
 
 function App() {
-  return (
+  	return (
 		<>
 			<GameProvider>
 				<Container h="100vh" py={4}>
@@ -13,7 +13,7 @@ function App() {
 				</Container>
 			</GameProvider>
 		</>
-  )
+  	)
 }
 
 export default App

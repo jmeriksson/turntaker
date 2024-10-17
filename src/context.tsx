@@ -13,18 +13,18 @@ export type TGameState = {
 }
 
 export type TGameAction =
-  | { type: "setIsPlaying"; data: boolean }
-  | { type: "setPlayers"; data: TPlayer[] }
-  | { type: "setDiceModalIsOpen"; data: boolean }
-  | { type: "setDiceIsRolling"; data: boolean }
+	| { type: "setIsPlaying"; data: boolean }
+	| { type: "setPlayers"; data: TPlayer[] }
+	| { type: "setDiceModalIsOpen"; data: boolean }
+	| { type: "setDiceIsRolling"; data: boolean }
 
 export type TSearchResultsDispatch = (action: TGameAction) => void
 
 export type TGameDispatch = (action: TGameAction) => void
 
 export type TGameContext = {
-  state: TGameState
-  dispatch: TGameDispatch
+	state: TGameState
+	dispatch: TGameDispatch
 }
 
 function gameReducer(
@@ -60,7 +60,7 @@ function gameReducer(
 }
 
 export const GameContext = createContext<
-  TGameContext | undefined
+	TGameContext | undefined
 >(undefined)
 
 export type TGameProviderProps = {
